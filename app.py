@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import requests
 
 
@@ -14,14 +14,19 @@ def home_page():  # put application's code here
 def about_page():
     return render_template('about.html')
 
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact_page():
-    return render_template('contact.html')
+    if request.method == 'POST':
+        form_data = request.form
+        return render_template('contact.html', msg_sent=True)
+    return render_template('contact.html', msg_sent=False)
+
 
 @app.route('/post/<int:post_id>')
 def get_post(post_id):
     post = all_posts[post_id - 1]
     return render_template('post.html', post=post)
+
 
 
 if __name__ == '__main__':
